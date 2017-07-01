@@ -1,0 +1,2 @@
+# Vote
+Simple vote system
