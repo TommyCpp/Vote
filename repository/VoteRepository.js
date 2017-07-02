@@ -1,8 +1,10 @@
-var VoteRepository = function (redis) {
-    this.datasource = redis;
-    this.add = function (vote) {
-        redis.incr(vote.target)
+class VoteRepository{
+    constructor(redis){
+        this.redis = redis;
     }
-};
+    add(vote){
+        this.redis.incr(vote.target);
+    }
+}
 
 module.exports = VoteRepository;

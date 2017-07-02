@@ -6,7 +6,7 @@ var Vote = require("../model/Vote");
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-    var vote_repository = new VoteRepository(redis);
+    let vote_repository = new VoteRepository(redis);
     vote_repository.add(new Vote());
     res.json("OK");
 });
