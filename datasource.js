@@ -2,7 +2,7 @@ var config = require("./config");
 var redis_client = require("redis");
 
 // Redis database setup
-var redis = redis_client.createClient({
+const redis = redis_client.createClient({
     "host": config.redis.host,
     "port": config.redis.port,
     "password": config.redis.password

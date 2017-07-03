@@ -1,8 +1,10 @@
-class VoteRepository{
-    constructor(redis){
+const redis = require("../datasource");
+class VoteRepository {
+    constructor() {
         this.redis = redis;
     }
-    add(vote){
+
+    add(vote) {
         this.redis.incr(vote.target);
     }
 }
