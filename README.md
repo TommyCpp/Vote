@@ -8,3 +8,12 @@ Simple vote system boosted by Node.js,Express and Jquery
 * High concurrency in short time
 * Use Redis as main database
 * Config the vote item and subject
+
+
+## API
+
+Method | URL | Expect Return | Comment
+--- | --- | --- | ---
+GET | /vote | `{ canadians:[], isRadio:boolean}`| List of the Canadians
+POST| /vote | `{ target:String }`| Choose
+

@@ -1,6 +1,8 @@
-var Vote = function () {
-    this.target = "test";
-    this.timestamp = new Date().getTime();
-};
+class Vote{
+    constructor(){
+        this.target = null;
+        this.timestamp = new Date().getTime();
+    }
 
+}
 module.exports = Vote;
