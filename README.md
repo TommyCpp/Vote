@@ -14,6 +14,7 @@ Simple vote system boosted by Node.js,Express and Jquery
 
 Method | URL | Expect Return | Comment
 --- | --- | --- | ---
-GET | /vote | `{ canadians:[], isRadio:boolean}`| List of the Canadians
-POST| /vote | `{ target:String }`| Choose
+GET | /vote | `{ canadians:[], limit:Number}`| List of the Canadians
+POST| /vote | `{ target:String[] }`| Choose
+
 

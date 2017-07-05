@@ -1,7 +1,8 @@
 class Vote {
-    constructor(target) {
-        this.target = target ? "" : target;
+    constructor(target,token) {
+        this.target = target ? target:"";
         this.timestamp = new Date().getTime();
+        this.token = token ? token : "";
     }
 
 
