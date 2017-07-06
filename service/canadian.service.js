@@ -5,7 +5,7 @@ module.exports = class CanadianService {
         this.fs = fs;
     }
 
-    readfile(path, callback) {
+    readFile(path, callback) {
         this.fs.readFile(path,'utf8', (err, data) => {
             if(err) throw err;
             callback(data);

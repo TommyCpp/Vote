@@ -3,6 +3,12 @@ var config = {
         "host": "",
         "port": "",
         "password": ""
+    },
+    vote: {
+        vote_limit: 1
+    },
+    encrypt: {
+        salt: ""
     }
 };
 

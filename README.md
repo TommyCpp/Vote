@@ -2,6 +2,9 @@
 Simple vote system boosted by Node.js,Express and Jquery
 
 ## Setup
+* Download the file / Clone
+* Use `npm install` to install the package 
+* Create the `config.js` by `config.example.js`
 * Use http://localhost:3000 to access
 
 ## Feature
@@ -9,12 +12,12 @@ Simple vote system boosted by Node.js,Express and Jquery
 * Use Redis as main database
 * Config the vote item and subject
 
-
 ## API
 
-Method | URL | Expect Return | Comment
---- | --- | --- | ---
-GET | /vote | `{ canadians:[], limit:Number}`| List of the Canadians
-POST| /vote | `{ target:String[] }`| Choose
+Method | URL | Header | Expect Return | Comment
+--- | --- |---| --- | ---
+GET | /vote | | `{ canadians:[], limit:Number}; Header: X-VOTE-TOKEN`| List of the Canadians
+POST| /vote |`X-VOTE-TOKEN`| `{ target:String[] }`| Choose 
+
 
 

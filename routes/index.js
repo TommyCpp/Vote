@@ -8,7 +8,10 @@ const VoteService = require("../service/vote.service");
 let vote_service = new VoteService();
 const CanadianService = require("../service/canadian.service");
 let canadian_service = new CanadianService();
+const TokenService = require("../service/token.service");
+let token_service = new TokenService();
 const authorization_filter = require("../filter/authorization.filter");
+const vote_limit = require("../config").vote.vote_limit;
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -38,12 +41,16 @@ router.route("/vote")
         }
     })
     .get((req, res, next) => {
-        canadian_service.readfile("canadian.list.json", (data) => {
-            let canadians = JSON.parse(data);
-            let result = {};
-            result.limit = 1; // TODO: use config to import the limit
-            result.canadians = canadians;
-            res.json(result);
+        //get the token use to prevent multi vote
+        token_service.encrypt(req.ip, (token) => {
+            res.set("X-VOTE-TOKEN", token);
+            canadian_service.readFile("canadian.list.json", (data) => {
+                let canadians = JSON.parse(data);
+                let result = {};
+                result.limit = 1; // TODO: use config to import the limit
+                result.canadians = canadians;
+                res.json(result);
+            })
         })
     });
 
