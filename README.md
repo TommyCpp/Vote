@@ -1,5 +1,5 @@
 # Vote
-Simple vote system boosted by Node.js,Express and Jquery
+Simple vote system boosted by Node.js,Express and Angular
 
 ## Setup
 * Download the file / Clone
@@ -8,7 +8,7 @@ Simple vote system boosted by Node.js,Express and Jquery
 * Use http://localhost:3000 to access
 
 ## Feature
-* High concurrency in short time
+* High concurrency
 * Use Redis as main database
 * Config the vote item and subject
 

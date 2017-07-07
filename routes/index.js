@@ -24,13 +24,21 @@ router.get('/', function (req, res, next) {
 router.route("/vote")
     .post((req, res, next) => {
         let targets = req.body["target"];
-        if (!targets && targets.length !== 0) {
+        let token = req.get("X-VOTE-TOKEN");
+        if (!targets || targets.length === 0 || !token || token.length === 0) {
             // Param Error
             res.status(404);
             res.json(new HttpError(404, "No efficient param provided"));
         }
+        else if (!(targets instanceof Array)) {
+            res.status(401);
+            res.json(new HttpError(401, "Target must be an array"));
+        }
+        else if(targets.length > vote_limit) {
+            res.status(401);
+            res.json(new HttpError(401, "Providing too many target"));
+        }
         else {
-            let token = authorization_filter(req, res, next);
             for (let i = 0; i < targets.length; i++) {
                 vote_service.vote(new Vote(targets[i], token), () => {
                     if (i === targets.length - 1) {
