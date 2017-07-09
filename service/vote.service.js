@@ -8,6 +8,9 @@ class VoteService {
     vote(vote,callback){
         this.repository.add(vote,callback);
     }
+    cleanup(callback){
+        this.repository.flushdb(callback);
+    }
 }
 
 module.exports = VoteService;

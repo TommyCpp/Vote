@@ -14,6 +14,10 @@ class VoteRepository {
     get(key,callback){
         this.redis.get(key,callback);
     }
+
+    flushdb(callback){
+        this.redis.flushdb(callback);
+    }
 }
 
 module.exports = VoteRepository;
