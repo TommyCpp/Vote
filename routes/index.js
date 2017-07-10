@@ -34,18 +34,28 @@ router.route("/vote")
             res.status(401);
             res.json(new HttpError(401, "Target must be an array"));
         }
-        else if(targets.length > vote_limit) {
+        else if (targets.length > vote_limit) {
             res.status(401);
             res.json(new HttpError(401, "Providing too many target"));
         }
         else {
-            for (let i = 0; i < targets.length; i++) {
-                vote_service.vote(new Vote(targets[i], token), () => {
-                    if (i === targets.length - 1) {
-                        res.json("success");
-                    }
-                });
-            }
+            vote_service.hasVoted(token, (err, data) => {
+                if (data) {
+                    res.status(403);
+                    res.json(new HttpError(403, "Has voted"));
+                }
+                else {
+                    token_service.save(token, () => {
+                        for (let i = 0; i < targets.length; i++) {
+                            vote_service.vote(new Vote(targets[i], token), () => {
+                                if (i === targets.length - 1) {
+                                    res.json("success");
+                                }
+                            });
+                        }
+                    })
+                }
+            });
         }
     })
     .get((req, res, next) => {
@@ -55,7 +65,7 @@ router.route("/vote")
             canadian_service.readFile("canadian.list.json", (data) => {
                 let canadians = JSON.parse(data);
                 let result = {};
-                result.limit = 1; // TODO: use config to import the limit
+                result.limit = vote_limit;
                 result.canadians = canadians;
                 res.json(result);
             })

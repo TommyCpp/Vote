@@ -2,14 +2,20 @@ const VoteRepository = require("../repository/vote.repository");
 const CanadianService = require("../service/canadian.service");
 class VoteService {
     constructor() {
-        this.repository = new VoteRepository();
+        this.vote_repository = new VoteRepository();
         this.canadian_service = new CanadianService();
     }
-    vote(vote,callback){
-        this.repository.add(vote,callback);
+
+    vote(vote, callback) {
+        this.vote_repository.add(vote, callback);
     }
-    cleanup(callback){
-        this.repository.flushdb(callback);
+
+    cleanup(callback) {
+        this.vote_repository.flushdb(callback);
+    }
+
+    hasVoted(token, callback) {
+        this.vote_repository.findToken(token, callback);
     }
 }
 

@@ -10,7 +10,10 @@ module.exports = class TokenService {
     encrypt(ip, callback) {
         //Encrypt
         let token = crypto.createHash('sha1').update(ip).update(salt).update(new Date().getTime()+"").digest('Base64');
-        this.respository.save(token,callback);
+        callback(token);
+    }
 
+    save(token,callback){
+        this.respository.save(token, callback);
     }
 };
