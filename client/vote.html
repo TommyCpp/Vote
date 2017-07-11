@@ -1,0 +1,75 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../public/stylesheets/material.min.css">
+    <script src="../public/stylesheets/material.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="https://unpkg.com/vue"></script>
+    <style>
+        .mdl-layout__content {
+            padding-top: 24px;
+            background-color: #ebebeb;
+        }
+
+        .mdl-card {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+            <!-- Title -->
+            <span class="mdl-layout-title">BDMUNC Vote System</span>
+            <!-- Add spacer, to align navigation to the right -->
+            <div class="mdl-layout-spacer"></div>
+            <!-- Navigation. We hide it in small screens. -->
+            <nav class="mdl-navigation mdl-layout--large-screen-only">
+            </nav>
+        </div>
+    </header>
+    <main class="mdl-layout__content">
+        <div class="page-content">
+            <div class="mdl-grid">
+                <div class="mdl-cell mdl-cell--4-col mdl-cell--12-col-phone mdl-cell--4-offset-desktop">
+                    <div class="mdl-card mdl-shadow--6dp">
+                        <div class="mdl-card__title mdl-color--primary mdl-color-text--white">
+                            <h2 class="mdl-card__title-text">第一轮投票</h2>
+                        </div>
+                        <div class="mdl-card__supporting-text">
+                            <form action="#">
+                                <div class="mdl-textfield" v-for="canadian in canadians">
+                                    <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect"
+                                           :for="canadian.name">
+                                        <input type="checkbox" :id="canadian.name" class="mdl-checkbox__input">
+                                        <span class="mdl-checkbox__label">{{canadian.name}}</span>
+                                    </label></div>
+                            </form>
+                            <script>
+                                var form = new Vue({
+                                    el: 'form',
+                                    data: {
+                                        canadians: [
+                                            {name: "test"},
+                                            {name: "test2"}
+                                            ,
+                                            {name: "测试3"}
+                                        ]
+                                    }
+                                });
+                            </script>
+                        </div>
+                        <div class="mdl-card__actions mdl-card--border">
+                            <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">投票
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>
