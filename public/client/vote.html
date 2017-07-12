@@ -3,9 +3,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../public/stylesheets/material.min.css">
-    <script src="../public/stylesheets/material.min.js"></script>
+    <link rel="stylesheet" href="../stylesheets/material.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <script src="https://unpkg.com/vue"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.3.4"></script>
     <style>
         .mdl-layout__content {
             padding-top: 24px;
@@ -47,19 +48,6 @@
                                         <span class="mdl-checkbox__label">{{canadian.name}}</span>
                                     </label></div>
                             </form>
-                            <script>
-                                var form = new Vue({
-                                    el: 'form',
-                                    data: {
-                                        canadians: [
-                                            {name: "test"},
-                                            {name: "test2"}
-                                            ,
-                                            {name: "测试3"}
-                                        ]
-                                    }
-                                });
-                            </script>
                         </div>
                         <div class="mdl-card__actions mdl-card--border">
                             <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">投票
@@ -72,4 +60,28 @@
     </main>
 </div>
 </body>
+<script>
+    var form = new Vue({
+        el: 'form',
+        data: {
+            canadians: [],
+            dataUrl: "http://localhost:3000/vote"
+        },
+        mounted: function () {
+            this.getData();
+        },
+        methods: {
+            getData: function () {
+                var vm = this;
+                vm.$http.get(vm.dataUrl).then(function (responses) {
+                    var canadians = [];
+                    for (var i = 0; i < responses.length; i++) {
+                        canadians.push({name: responses[i]});
+                    }
+                    vm.$set('canadians', canadians);
+                });
+            }
+        }
+    });
+</script>
 </html>
