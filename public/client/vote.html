@@ -77,7 +77,19 @@
         methods: {
             getData: function () {
                 var vm = this;
+                //save the data to local storage
+
                 vm.$http.get(vm.dataUrl).then(function (response) {
+                    var localStorage = window.localStorage;
+                    var token = response.headers.map["X-VOTE-TOKEN"][0];
+                    //save the token to local storage
+                    if(localStorage.getItem("X-VOTE-TOKEN") === null){
+                        // if do not have this item
+                        localStorage.setItem("X-VOTE-TOKEN",token);
+                        console.log("X-VOTE-TOKEN");
+                    }
+
+
                     response = JSON.parse(response.bodyText);
                     this.limit = response.limit;
                     for (var i = 0; i < response.canadians.length; i++) {
