@@ -12,14 +12,14 @@ const TokenService = require("../service/token.service");
 let token_service = new TokenService();
 const authorization_filter = require("../filter/authorization.filter");
 const vote_limit = require("../config").vote.vote_limit;
+const path = require('path');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-    let vote_repository = new VoteRepository();
-    vote_repository.get("测试", (err, reply) => {
-        res.json(reply);
-    });
+    res.set("Content-Type", "text/html");
+    res.sendFile(path.resolve("public/client/vote.html"));
 });
+
 
 router.route("/vote")
     .post((req, res, next) => {
