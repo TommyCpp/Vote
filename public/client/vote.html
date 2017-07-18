@@ -17,6 +17,8 @@
             width: 100%;
         }
     </style>
+    <link rel="stylesheet" href="../stylesheets/dialog-polyfill.css">
+    <script src="../javascripts/dialog-polyfill.js"></script>
 </head>
 <body>
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
@@ -54,6 +56,17 @@
                                     v-on:click="sendData">投票
                             </button>
                         </div>
+                        <dialog class="mdl-dialog">
+                            <h4 class="mdl-dialog__title" style="color:indianred">错误</h4>
+                            <div class="mdl-dialog__content">
+                                <p id="warning">
+                                    投票过程中出现错误
+                                </p>
+                            </div>
+                            <div class="mdl-dialog__actions">
+                                <button type="button" class="mdl-button close">关闭</button>
+                            </div>
+                        </dialog>
                     </div>
                 </div>
             </div>
@@ -119,10 +132,26 @@
                 }
                 var token = window.localStorage.getItem("X-VOTE-TOKEN");
                 this.$http.post(this.dataUrl, data, {headers: {"X-VOTE-TOKEN": token}}).then(function (response) {
-                    if (response.status === 200) {
-                        console.log("Success");
-                        //Todo: Error Handle
+                    console.log("Success");
+                }, function (response) {
+                    var dialog = document.querySelector("dialog");
+                    var close_button = document.querySelector(".close");
+                    if (!dialog.showModal) {
+                        dialogPolyfill.registerDialog(dialog);
                     }
+                    if (response.bodyText.indexOf("Providing") !== -1) {
+                        document.querySelector("#warning").textContent = "选择了过多的候选人"
+                    }
+                    if (response.bodyText.indexOf("Has Voted") !== -1) {
+                        document.querySelector("#warning").textContent = "已经投过了"
+                    }
+                    dialog.showModal();
+                    close_button.addEventListener('click', function () {
+                        var dialog = document.querySelector("dialog");
+                        document.querySelector("#warning").textContent = "投票过程出现错误";
+                        if (dialog.open)
+                            dialog.close();
+                    })
                 });
 
             }
