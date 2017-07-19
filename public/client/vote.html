@@ -103,8 +103,8 @@
                         console.log("X-VOTE-TOKEN");
                     }
 
-
                     response = JSON.parse(response.bodyText);
+                    localStorage.setItem("version", response.version);
                     this.limit = response.limit;
                     for (var i = 0; i < response.canadians.length; i++) {
                         this.canadians.push({name: response.canadians[i]});
@@ -130,6 +130,7 @@
                         data.target.push(checkboxs[i].id)
                     }
                 }
+                data.version = localStorage.getItem("version");
                 var token = window.localStorage.getItem("X-VOTE-TOKEN");
                 this.$http.post(this.dataUrl, data, {headers: {"X-VOTE-TOKEN": token}}).then(function (response) {
                     console.log("Success");
@@ -139,11 +140,17 @@
                     if (!dialog.showModal) {
                         dialogPolyfill.registerDialog(dialog);
                     }
-                    if (response.bodyText.indexOf("Providing") !== -1) {
+                    if (response.bodyText.search("param") !== -1) {
+                        document.querySelector("#warning").textContent = "请选择候选人"
+                    }
+                    if (response.bodyText.search("Providing") !== -1) {
                         document.querySelector("#warning").textContent = "选择了过多的候选人"
                     }
-                    if (response.bodyText.indexOf("Has Voted") !== -1) {
+                    if (response.bodyText.search("voted") !== -1) {
                         document.querySelector("#warning").textContent = "已经投过了"
+                    }
+                    if (response.bodyText.search("expired") !== -1) {
+                        document.querySelector("#warning").textContent = "页面已过期，请刷新"
                     }
                     dialog.showModal();
                     close_button.addEventListener('click', function () {
