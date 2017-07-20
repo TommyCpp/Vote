@@ -9,9 +9,20 @@ const vote_service = new VoteService();
 router.get("/", (req, res, next) => {
     if (req.query.token === "SecretToken") {
         res.status(200);
-        res.set("X-AUTHENTICATION-TOKEN", authentication_token);
         res.set("Content-Type", "text/html");
         res.sendFile(path.resolve("public/client/admin.html"));
+    }
+    else {
+        res.status(403);
+        res.json("Bad Credential");
+    }
+});
+
+router.post("/", (req, res, next) => {
+    if (req.body.token === "SecretToken") {
+        res.status(200);
+        res.set("X-AUTHENTICATION-TOKEN", authentication_token);
+        res.json();
     }
     else {
         res.status(403);

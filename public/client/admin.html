@@ -80,11 +80,15 @@
             canadians: [],
             results: [],
             dataUrl: "http://localhost:3000/vote",
-            resultUrl: "http://localhost:3000/admin/result"
+            resultUrl: "http://localhost:3000/admin/result",
+            tokenUrl: "http://localhost:3000/admin"
         },
         created: function () {
             var vm = this;
             //save the data to local storage
+            vm.$http.post(vm.tokenUrl, {"token": "SecretToken"}).then(function (response) {
+                window.localStorage.setItem("X-AUTHENTICATION-TOKEN", response.headers.map["X-AUTHENTICATION-TOKEN"][0])
+            });
 
             vm.$http.get(vm.dataUrl).then(function (response) {
 
@@ -93,7 +97,7 @@
                 for (var i = 0; i < response.canadians.length; i++) {
                     this.canadians.push({name: response.canadians[i]});
                     const j = i;
-                    vm.$http.post(vm.resultUrl, {"target": response.canadians[i]}).then(function (response) {
+                    vm.$http.post(vm.resultUrl, {"target": response.canadians[i]}, {headers: {"X-AUTHENTICATION-TOKEN": window.localStorage.getItem("X-AUTHENTICATION-TOKEN")}}).then(function (response) {
                         response = JSON.parse(response.bodyText);
                         if (response === null) {
                             this.$set(vm.canadians[j], 'value', 0)
@@ -101,15 +105,27 @@
                         else {
                             this.$set(vm.canadians[j], 'value', response);
                         }
-                    })
+                    });
                 }
             });
         },
         method: {}
-    })
+    });
 </script>
 <script>
-
+    var submit = new Vue({
+        el: "#submit",
+        data: {
+            deleteUrl: "http://localhost:3000/admin/delete"
+        },
+        methods: {
+            deleteData: function (event) {
+                this.$http.post(this.deleteUrl, {}, {headers: {"X-AUTHENTICATION-TOKEN": window.localStorage.getItem("X-AUTHENTICATION-TOKEN")}}).then(function () {
+                    window.location.reload();
+                });
+            }
+        }
+    });
 </script>
 
 </html>
