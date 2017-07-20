@@ -25,6 +25,10 @@ class VoteRepository {
             }
         )
     }
+
+    getResult(target, callback) {
+        this.redis.get(target, callback);
+    }
 }
 
 module.exports = VoteRepository;

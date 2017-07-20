@@ -24,7 +24,7 @@ router.route("/vote")
         let targets = req.body["target"];
         let token = req.get("X-VOTE-TOKEN");
         let version = req.body["version"];
-        canadian_service.readFile("canadian.list.json",(data)=>{
+        canadian_service.readFile("canadian.list.json", (data) => {
             data = JSON.parse(data);
             let canadians = data.canadians;
             let current_version = data.version;
@@ -43,7 +43,7 @@ router.route("/vote")
                 res.status(401);
                 res.json(new HttpError(401, "Providing too many target"));
             }
-            else if(current_version != version){
+            else if (current_version !== parseInt(version)) {
                 res.status(403);
                 res.json(new HttpError(403, "Page has expired"));
             }

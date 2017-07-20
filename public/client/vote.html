@@ -25,7 +25,7 @@
     <header class="mdl-layout__header">
         <div class="mdl-layout__header-row">
             <!-- Title -->
-            <span class="mdl-layout-title">BDMUNC Vote System</span>
+            <span class="mdl-layout-title">BDMUNC Poll System</span>
             <!-- Add spacer, to align navigation to the right -->
             <div class="mdl-layout-spacer"></div>
             <!-- Navigation. We hide it in small screens. -->
@@ -80,7 +80,7 @@
         data: {
             canadians: [],
             limit: 0,
-            dataUrl: "http://localhost:3000/vote"
+            dataUrl: "http://localhost:3000/vote",
         },
         created: function () {
             this.getData();
@@ -88,7 +88,7 @@
         updated: function () {
             componentHandler.upgradeAllRegistered();
         },
-        methods: {
+        method: {
             getData: function () {
                 var vm = this;
                 //save the data to local storage
@@ -105,6 +105,7 @@
 
                     response = JSON.parse(response.bodyText);
                     localStorage.setItem("version", response.version);
+                    document.querySelector(".mdl-card__title-text").textContent = "第" + response.version + "轮投票";
                     this.limit = response.limit;
                     for (var i = 0; i < response.canadians.length; i++) {
                         this.canadians.push({name: response.canadians[i]});

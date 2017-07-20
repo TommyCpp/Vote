@@ -17,6 +17,10 @@ class VoteService {
     hasVoted(token, callback) {
         this.vote_repository.findToken(token, callback);
     }
+
+    getResult(target, callback) {
+        this.vote_repository.getResult(target, callback)
+    }
 }
 
 module.exports = VoteService;
