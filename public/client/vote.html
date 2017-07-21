@@ -56,12 +56,21 @@
                                     v-on:click="sendData">投票
                             </button>
                         </div>
-                        <dialog class="mdl-dialog">
+                        <dialog class="mdl-dialog" id="fail">
                             <h4 class="mdl-dialog__title" style="color:indianred">错误</h4>
                             <div class="mdl-dialog__content">
                                 <p id="warning">
                                     投票过程中出现错误
                                 </p>
+                            </div>
+                            <div class="mdl-dialog__actions">
+                                <button type="button" class="mdl-button close">关闭</button>
+                            </div>
+                        </dialog>
+                        <dialog class="mdl-dialog" id="success">
+                            <h4 class="mdl-dialog__title" style="color:greenyellow">成功</h4>
+                            <div class="mdl-dialog__content">
+                                已经成功投票
                             </div>
                             <div class="mdl-dialog__actions">
                                 <button type="button" class="mdl-button close">关闭</button>
@@ -80,7 +89,7 @@
         data: {
             canadians: [],
             limit: 0,
-            dataUrl: "http://localhost:3000/vote",
+            dataUrl: "http://127.0.0.1:3000/vote",
         },
         created: function () {
             this.getData();
@@ -88,19 +97,19 @@
         updated: function () {
             componentHandler.upgradeAllRegistered();
         },
-        method: {
+        methods: {
             getData: function () {
                 var vm = this;
                 //save the data to local storage
 
                 vm.$http.get(vm.dataUrl).then(function (response) {
                     var localStorage = window.localStorage;
-                    var token = response.headers.map["X-VOTE-TOKEN"][0];
+                    var token = response.headers.map["X-Vote-Token"][0];
                     //save the token to local storage
-                    if (localStorage.getItem("X-VOTE-TOKEN") === null) {
+                    if (localStorage.getItem("X-Vote-Token") === null) {
                         // if do not have this item
-                        localStorage.setItem("X-VOTE-TOKEN", token);
-                        console.log("X-VOTE-TOKEN");
+                        localStorage.setItem("X-Vote-Token", token);
+                        console.log("X-Vote-Token");
                     }
 
                     response = JSON.parse(response.bodyText);
@@ -117,7 +126,7 @@
     var submit = new Vue({
         el: "#submit",
         data: {
-            dataUrl: "http://localhost:3000/vote"
+            dataUrl: "http://127.0.0.1:3000/vote"
         },
         methods: {
             sendData: function () {
@@ -132,12 +141,19 @@
                     }
                 }
                 data.version = localStorage.getItem("version");
-                var token = window.localStorage.getItem("X-VOTE-TOKEN");
-                this.$http.post(this.dataUrl, data, {headers: {"X-VOTE-TOKEN": token}}).then(function (response) {
-                    console.log("Success");
+                var token = window.localStorage.getItem("X-Vote-Token");
+                this.$http.post(this.dataUrl, data, {headers: {"X-Vote-Token": token}}).then(function (response) {
+                    var dialog = document.querySelector("dialog#success");
+                    var close_button = document.querySelector("dialog#success .close");
+                    dialog.showModal();
+                    close_button.addEventListener('click', function () {
+                        var dialog = document.querySelector("dialog#success");
+                        if (dialog.open)
+                            dialog.close();
+                    })
                 }, function (response) {
-                    var dialog = document.querySelector("dialog");
-                    var close_button = document.querySelector(".close");
+                    var dialog = document.querySelector("dialog#fail");
+                    var close_button = document.querySelector("dialog#fail .close");
                     if (!dialog.showModal) {
                         dialogPolyfill.registerDialog(dialog);
                     }
@@ -155,7 +171,7 @@
                     }
                     dialog.showModal();
                     close_button.addEventListener('click', function () {
-                        var dialog = document.querySelector("dialog");
+                        var dialog = document.querySelector("dialog#fail");
                         document.querySelector("#warning").textContent = "投票过程出现错误";
                         if (dialog.open)
                             dialog.close();

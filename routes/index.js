@@ -22,7 +22,7 @@ router.get('/', function (req, res, next) {
 router.route("/vote")
     .post((req, res, next) => {
         let targets = req.body["target"];
-        let token = req.get("X-VOTE-TOKEN");
+        let token = req.get("X-Vote-Token");
         let version = req.body["version"];
         canadian_service.readFile("canadian.list.json", (data) => {
             data = JSON.parse(data);
@@ -71,7 +71,7 @@ router.route("/vote")
     .get((req, res, next) => {
         //get the token use to prevent multi vote
         token_service.encrypt(req.ip, (token) => {
-            res.set("X-VOTE-TOKEN", token);
+            res.set("X-Vote-Token", token);
             canadian_service.readFile("canadian.list.json", (data) => {
                 let canadians = JSON.parse(data);
                 let result = {};
